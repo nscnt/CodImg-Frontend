@@ -5,13 +5,17 @@ import "./prism.css";
 import './App.css';
 
 
+
 const ColorPicker = () => {
   const [color, setColor] = useState('#ffffff');
   return (
     <BlockPicker 
       triangle = "hide"
       color = {color}
-      onChangeComplete={ (color) => setColor(color) }
+      onChangeComplete={(color) => {
+        document.getElementsByClassName('step')[4].style.background = color.hex;
+        setColor(color);
+      }}
     />
   );
 }
@@ -19,10 +23,20 @@ const ColorPicker = () => {
 const CodePicker = () => {
   return (
     <select>
-      <option value="grapefruit">JS</option>
-      <option value="lime">CSS</option>
-      <option selected value="coconut">HTML</option>
-      <option value="mango">C++</option>
+      <option selected value="js">JS</option>
+      <option value="css">CSS</option>
+      <option value="html">HTML</option>
+      <option value="c++">C++</option>
+    </select>
+  );
+}
+
+const ThemePicker = () => {
+  return (
+    <select>
+      <option selected value="monokai">Monokai</option>
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
     </select>
   );
 }
@@ -31,10 +45,7 @@ const InstructionStep = (props) => {
   return (
     <div className="step">
       <div className="step-header">
-        <div className="circle">
-          {`${props.number}`}
-        </div>
-        <p>{props.titleText}</p>
+        { props.titleText ? <p>{props.titleText}</p> : null }
       </div>
       {props.children}    
     </div>
@@ -47,34 +58,37 @@ function App() {
     <div className="App">
       <div className="App-body">
         <div className="options">
-          <InstructionStep number={1} titleText="Choose a background color">
+          <InstructionStep titleText="Choose a background color">
             <ColorPicker />
           </InstructionStep>        
-          <InstructionStep number={2} titleText="Select a language">
+          <InstructionStep titleText="Select a language">
             <CodePicker />
           </InstructionStep>
-          <InstructionStep number={3} titleText="Select a theme">
-            <CodePicker />
+          <InstructionStep titleText="Select a theme">
+            <ThemePicker />
           </InstructionStep>
         </div>
-        <div className="code-area">
-          <InstructionStep number={4} titleText="Write your code">
-            {/* <textarea className="text-area" name="message" rows="50" cols="30"></textarea> */}
-            <pre>
-  <code className="language-javascript">
-  {`
-    onSubmit(e) {
-      e.preventDefault();
-      const job = {
-        title: 'Developer',
-        company: 'Facebook' 
-        };
-      }
-  `}
-  </code>
-</pre>
+        <div className="editor">
+          <InstructionStep style={{display: 'flex'}}>
+            <textarea spellCheck="false" name="message"></textarea>
           </InstructionStep>
-          
+          <InstructionStep>
+            <div className="preview">
+              <pre>
+                <code className="language-javascript">
+                  {`
+                    onSubmit(e) {
+                      e.preventDefault();
+                      const job = {
+                        title: 'Developer',
+                        company: 'Facebook' 
+                        };
+                      }
+                  `}
+                </code>
+              </pre>
+            </div>
+          </InstructionStep>
         </div>
       </div>
     </div>
