@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BlockPicker } from 'react-color';
-import Prism from 'prismjs';
-import "./prism.css";
 import './App.css';
 
-
-
-const ColorPicker = () => {
+const ColorPicker = (props) => {
   const [color, setColor] = useState('#ffffff');
   return (
     <BlockPicker 
@@ -15,6 +11,7 @@ const ColorPicker = () => {
       onChangeComplete={(color) => {
         document.getElementsByClassName('step')[4].style.background = color.hex;
         setColor(color);
+        props.handler(color);
       }}
     />
   );
@@ -53,13 +50,24 @@ const InstructionStep = (props) => {
   );
 }
 
+const CodeImage = (props) => {
+  return (
+    <img alt="Write code to make preview appear" src={`https://codimg.xyz/api/image?language=javascript&backgroundColor=%23${props.backgroundColor}&theme=hopscotch&show-background=true&code=${props.code}&padding=10`}></img>
+  );
+}
+
 function App() {
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const [code, setCode] = useState('');
+  const colorHandler = (color) => setBackgroundColor(color.hex.substring(1));
+  useEffect(() => setBackgroundColor(backgroundColor), [backgroundColor]);
+
   return (
     <div className="App">
       <div className="App-body">
         <div className="options">
           <InstructionStep titleText="Choose a background color">
-            <ColorPicker />
+            <ColorPicker handler={colorHandler}/>
           </InstructionStep>        
           <InstructionStep titleText="Select a language">
             <CodePicker />
@@ -70,11 +78,11 @@ function App() {
         </div>
         <div className="editor">
           <InstructionStep style={{display: 'flex'}}>
-            <textarea spellCheck="false" name="message"></textarea>
+            <textarea value={code} onChange={(text) => setCode(text.target.value)} spellCheck="false" name="message"></textarea>
           </InstructionStep>
           <InstructionStep>
             <div className="preview">
-              <pre>
+              {/* <pre>
                 <code className="language-javascript">
                   {`
                     onSubmit(e) {
@@ -86,7 +94,8 @@ function App() {
                       }
                   `}
                 </code>
-              </pre>
+              </pre> */}
+              <CodeImage backgroundColor={backgroundColor} code={code} />
             </div>
           </InstructionStep>
         </div>
