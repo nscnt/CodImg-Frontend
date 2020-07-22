@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BlockPicker } from 'react-color';
 import './App.css';
 
@@ -60,7 +60,6 @@ function App() {
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const [code, setCode] = useState('');
   const colorHandler = (color) => setBackgroundColor(color.hex.substring(1));
-  useEffect(() => setBackgroundColor(backgroundColor), [backgroundColor]);
 
   return (
     <div className="App">
@@ -82,19 +81,6 @@ function App() {
           </InstructionStep>
           <InstructionStep>
             <div className="preview">
-              {/* <pre>
-                <code className="language-javascript">
-                  {`
-                    onSubmit(e) {
-                      e.preventDefault();
-                      const job = {
-                        title: 'Developer',
-                        company: 'Facebook' 
-                        };
-                      }
-                  `}
-                </code>
-              </pre> */}
               <CodeImage backgroundColor={backgroundColor} code={code} />
             </div>
           </InstructionStep>
