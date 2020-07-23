@@ -28,7 +28,7 @@
   margin: 1em 1em 1em 0;
   grid-column: 2/3;
   display: grid;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 1fr 0.2fr 2fr;
   grid-row-gap: 1em;
 }
 
@@ -40,6 +40,8 @@ textarea:focus {
 
 textarea {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #121212;
+  color: white;
   box-sizing: border-box;
   padding: 1em;
   resize: none;
@@ -53,10 +55,39 @@ img {
   max-width: 70%;
 }
 
+#link-text {
+  font-size: 14px;
+  position: relative;
+  bottom: 10px;
+}
+
+#preview-button {
+  justify-self: center;
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border:0.1em solid #FFFFFF;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-weight: bolder;
+  color:#FFFFFF;
+  background-color: transparent;
+  text-align:center;
+  transition: 0.2s;
+}
+
+#preview-button:hover {
+	color: #2b2b2b;
+	background-color: white;
+}
 .step {
   background-color: #2b2b2b;
   padding: 10px;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step-header {

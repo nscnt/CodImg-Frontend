@@ -6,7 +6,7 @@ const ColorPicker = (props) => {
   const [color, setColor] = useState('#ffffff');
   return (
     <BlockPicker 
-      triangle = "hide"
+      triangle = 'hide'
       color = {color}
       onChangeComplete={(color) => {
         document.getElementsByClassName('step')[4].style.background = color.hex;
@@ -17,31 +17,35 @@ const ColorPicker = (props) => {
   );
 }
 
-const CodePicker = () => {
+const generatePicker = (iterable, handler) => {
   return (
-    <select>
-      <option selected value="js">JS</option>
-      <option value="css">CSS</option>
-      <option value="html">HTML</option>
-      <option value="c++">C++</option>
+    <select onChange={(event) => handler(event.target.value)}>
+      {
+        iterable.map((item, index) => <option key={index} value={item}>{item}</option>)
+      }
     </select>
   );
 }
 
-const ThemePicker = () => {
-  return (
-    <select>
-      <option selected value="monokai">Monokai</option>
-      <option value="dark">Dark</option>
-      <option value="light">Light</option>
-    </select>
-  );
+const CodePicker = (props) => {
+  const languages = ['c', 'css', 'cpp', 'go', 'html', 'java', 'javascript', 'python', 'rust', 'typescript'];
+  return generatePicker(languages, props.handler);
+}
+
+const ThemePicker = (props) => {
+  const themes = ['a11y-dark', 'atom-dark', 'base16-ateliersulphurpool.light', 'cb','darcula', 'default',
+    'dracula', 'duotone-dark', 'duotone-earth', 'duotone-forest', 'duotone-light',
+    'duotone-sea', 'duotone-space', 'ghcolors', 'hopscotch', 'material-dark',
+    'material-light', 'material-oceanic', 'nord', 'pojoaque', 'shades-of-purple',
+    'synthwave84','vs','vsc-dark-plus','xonokai'
+  ];
+  return generatePicker(themes, props.handler);
 }
 
 const InstructionStep = (props) => {
   return (
-    <div className="step">
-      <div className="step-header">
+    <div className='step'>
+      <div className='step-header'>
         { props.titleText ? <p>{props.titleText}</p> : null }
       </div>
       {props.children}    
@@ -52,42 +56,73 @@ const InstructionStep = (props) => {
 
 const CodeImage = (props) => {
   return (
-    <img alt="Write code to make preview appear" src={`https://codimg.xyz/api/image?language=javascript&backgroundColor=%23${props.backgroundColor}&theme=hopscotch&show-background=true&code=${props.code}&padding=10`}></img>
+    <img alt='Preview Area' src={props.queryString}></img>
   );
 }
 
-function App() {
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-  const [code, setCode] = useState('');
-  const colorHandler = (color) => setBackgroundColor(color.hex.substring(1));
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.colorHandler = this.colorHandler.bind(this);
+    this.themeHandler = this.themeHandler.bind(this);
+    this.languageHandler = this.languageHandler.bind(this);
+    this.state = {
+      backgroundColor: 'ffffff',
+      theme: 'a11y-dark',
+      language: 'c',
+      code: '',
+      queryString: ''
+    };
+  }
 
-  return (
-    <div className="App">
-      <div className="App-body">
-        <div className="options">
-          <InstructionStep titleText="Choose a background color">
-            <ColorPicker handler={colorHandler}/>
-          </InstructionStep>        
-          <InstructionStep titleText="Select a language">
-            <CodePicker />
-          </InstructionStep>
-          <InstructionStep titleText="Select a theme">
-            <ThemePicker />
-          </InstructionStep>
-        </div>
-        <div className="editor">
-          <InstructionStep style={{display: 'flex'}}>
-            <textarea value={code} onChange={(text) => setCode(text.target.value)} spellCheck="false" name="message"></textarea>
-          </InstructionStep>
-          <InstructionStep>
-            <div className="preview">
-              <CodeImage backgroundColor={backgroundColor} code={code} />
-            </div>
-          </InstructionStep>
+  colorHandler(color) {
+    this.setState({ backgroundColor: color.hex.substring(1) });
+  }
+  
+  themeHandler(theme) {
+    this.setState({ theme });
+  }
+
+  languageHandler(language) {
+    this.setState({ language });
+  }
+
+  getQueryString() {
+    if (this.state.code === '') return '';
+    else return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&code=${this.state.code}&padding=10`
+  }
+
+  render() {
+    return (
+      <div className='App'>
+        <div className='App-body'>
+          <div className='options'>
+            <InstructionStep titleText='Choose a background color'>
+              <ColorPicker handler={this.colorHandler}/>
+            </InstructionStep>        
+            <InstructionStep titleText='Select a language'>
+              <CodePicker handler={this.languageHandler} />
+            </InstructionStep>
+            <InstructionStep titleText='Select a theme'>
+              <ThemePicker handler={this.themeHandler} />
+            </InstructionStep>
+          </div>
+          <div className='editor'>
+            <InstructionStep style={{display: 'flex'}}>
+              <textarea placeholder="code here..." value={this.state.code} onChange={(text) => this.setState({ code: text.target.value })} spellCheck='false' name='message'></textarea>
+            </InstructionStep>
+            <button id='preview-button' onClick={() => this.setState({ queryString: this.getQueryString() })}>generate preview</button>
+            <InstructionStep>
+              <div className='preview'>
+                <CodeImage queryString={this.state.queryString} />
+                { this.state.queryString === '' ? null : <p id='link-text'>embed link: {this.state.queryString}</p> }
+              </div>
+            </InstructionStep>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
