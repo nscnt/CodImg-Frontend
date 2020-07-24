@@ -1,46 +1,7 @@
-import React, { useState } from 'react';
-import { BlockPicker } from 'react-color';
+import React from 'react';
+import { CodeSelectBox, ThemeSelectBox } from './components/selectBox';
+import ColorPicker from './components/colorPicker';
 import './App.css';
-
-const ColorPicker = (props) => {
-  const [color, setColor] = useState('#ffffff');
-  return (
-    <BlockPicker 
-      triangle = 'hide'
-      color = {color}
-      onChangeComplete={(color) => {
-        document.getElementsByClassName('step')[4].style.background = color.hex;
-        setColor(color);
-        props.handler(color);
-      }}
-    />
-  );
-}
-
-const generatePicker = (iterable, handler) => {
-  return (
-    <select onChange={(event) => handler(event.target.value)}>
-      {
-        iterable.map((item, index) => <option key={index} value={item}>{item}</option>)
-      }
-    </select>
-  );
-}
-
-const CodePicker = (props) => {
-  const languages = ['c', 'css', 'cpp', 'go', 'html', 'java', 'javascript', 'python', 'rust', 'typescript'];
-  return generatePicker(languages, props.handler);
-}
-
-const ThemePicker = (props) => {
-  const themes = ['a11y-dark', 'atom-dark', 'base16-ateliersulphurpool.light', 'cb','darcula', 'default',
-    'dracula', 'duotone-dark', 'duotone-earth', 'duotone-forest', 'duotone-light',
-    'duotone-sea', 'duotone-space', 'ghcolors', 'hopscotch', 'material-dark',
-    'material-light', 'material-oceanic', 'nord', 'pojoaque', 'shades-of-purple',
-    'synthwave84','vs','vsc-dark-plus','xonokai'
-  ];
-  return generatePicker(themes, props.handler);
-}
 
 const InstructionStep = (props) => {
   return (
@@ -101,10 +62,10 @@ class App extends React.Component {
               <ColorPicker handler={this.colorHandler}/>
             </InstructionStep>        
             <InstructionStep titleText='Select a language'>
-              <CodePicker handler={this.languageHandler} />
+              <CodeSelectBox handler={this.languageHandler} />
             </InstructionStep>
             <InstructionStep titleText='Select a theme'>
-              <ThemePicker handler={this.themeHandler} />
+              <ThemeSelectBox handler={this.themeHandler} />
             </InstructionStep>
           </div>
           <div className='editor'>

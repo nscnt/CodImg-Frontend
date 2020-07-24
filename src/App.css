@@ -31,6 +31,10 @@
   grid-row-gap: 1em;
 }
 
+.select-box {
+  font-size: 14px;
+}
+
 textarea:focus { 
   outline: none !important;
   border-color: transparent;
