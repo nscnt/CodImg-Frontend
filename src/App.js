@@ -50,7 +50,7 @@ class App extends React.Component {
 
   getQueryString() {
     if (this.state.code === '') return '';
-    else return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&code=${this.state.code}&padding=10`
+    else return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&code=${encodeURI(this.state.code)}&padding=10`
   }
 
   render() {
