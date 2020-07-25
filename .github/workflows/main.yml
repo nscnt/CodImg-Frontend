@@ -1,4 +1,4 @@
-name: push to bitbucket
+name: push remote EC2
 on: push
 jobs:
   repo-sync:
@@ -14,7 +14,7 @@ jobs:
          key: ${{ secrets.SSH_PRIVATE_KEY }}
          known_hosts: ${{ secrets.KNOWN_HOSTS }}
     - run: |
-        git remote add staging ssh://ubuntu@ec2-18-191-182-101.us-east-2.compute.amazonaws.com/home/codimg-frontend
+        git remote add staging ssh://ubuntu@ec2-3-129-88-42.us-east-2.compute.amazonaws.com/home/codimg-frontend
         git config --global user.email "ebwinters@comcast.net"
         git config --global user.name "ebwinters"
         git checkout master
