@@ -32,6 +32,7 @@ class App extends React.Component {
       theme: 'a11y-dark',
       language: 'c',
       code: '',
+      gistID: '',
       queryString: ''
     };
   }
@@ -49,7 +50,8 @@ class App extends React.Component {
   }
 
   getQueryString() {
-    if (this.state.code === '') return '';
+    if (this.state.code === '' && this.state.gistID === '') return '';
+    else if (this.state.code === '' && this.state.gistID !== '') return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&gistid=${this.state.gistID}&padding=10`
     else return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&code=${encodeURI(this.state.code)}&padding=10`
   }
 
@@ -70,7 +72,9 @@ class App extends React.Component {
           </div>
           <div className='editor'>
             <InstructionStep style={{display: 'flex'}}>
-              <textarea placeholder="code here..." value={this.state.code} onChange={(text) => this.setState({ code: text.target.value })} spellCheck='false' name='message'></textarea>
+              <textarea style={{height: '70%', marginBottom: '0.5em'}} placeholder="write code here..." value={this.state.code} onChange={(text) => this.setState({ code: text.target.value })} spellCheck='false' name='message'></textarea>
+              <textarea style={{height: '30%'}} placeholder="OR put a gist ID here..." value={this.state.gistID} onChange={(text) => this.setState({ gistID: text.target.value })} spellCheck='false' name='message'></textarea>
+              
             </InstructionStep>
             <button id='preview-button' onClick={() => this.setState({ queryString: this.getQueryString() })}>generate preview</button>
             <InstructionStep>
