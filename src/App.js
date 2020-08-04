@@ -51,7 +51,7 @@ class App extends React.Component {
 
   getQueryString() {
     if (this.state.code === '' && this.state.gistID === '') return '';
-    else if (this.state.code === '' && this.state.gistID !== '') return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&gistid=${this.state.gistID}&padding=10`
+    else if (this.state.code === '' && this.state.gistID !== '') return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&gistId=${this.state.gistID}&padding=10`
     else return `https://codimg.xyz/api/image?language=${this.state.language}&backgroundColor=%23${this.state.backgroundColor}&theme=${this.state.theme}&show-background=true&code=${encodeURI(this.state.code)}&padding=10`
   }
 
